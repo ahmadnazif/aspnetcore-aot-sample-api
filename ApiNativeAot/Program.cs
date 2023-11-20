@@ -1,6 +1,8 @@
 using ApiNativeAot.Models;
 using ApiNativeAot.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography.Xml;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -21,45 +23,55 @@ builder.WebHost.ConfigureKestrel(x =>
 
 var app = builder.Build();
 
-var sampleTodos = new Todo[] {
-    new(1, "Walk the dog"),
-    new(2, "Do the dishes", DateOnly.FromDateTime(DateTime.Now)),
-    new(3, "Do the laundry", DateOnly.FromDateTime(DateTime.Now.AddDays(1))),
-    new(4, "Clean the bathroom"),
-    new(5, "Clean the car", DateOnly.FromDateTime(DateTime.Now.AddDays(2)))
-};
-
-var todosApi = app.MapGroup("/todos");
-todosApi.MapGet("/", () => sampleTodos);
-todosApi.MapGet("/{id}", (int id) =>
-    sampleTodos.FirstOrDefault(a => a.Id == id) is { } todo
-        ? Results.Ok(todo)
-        : Results.NotFound());
+app.MapGet("/", () => "Please use /sms endpoints");
 
 var smsEndpoint = app.MapGroup("/sms");
-smsEndpoint.MapGet("/", () => new List<Sms>());
+smsEndpoint.MapGet("/", () =>
+{
+    return "Please use: /get, /list-all, /add, /edit, or /delete endpoint";
+});
 
-//smsEndpoint.MapGet("/get", async (InMemorySimpleDb db, [FromQuery] string id) =>
-//{
-//    return await db.GetSmsAsync(id);
-//});
+smsEndpoint.MapGet("/get", async (InMemorySimpleDb db, string id) =>
+{
+    return await db.GetSmsAsync(id);
+});
 
-//smsEndpoint.MapGet("/list-all", async (InMemorySimpleDb db) =>
-//{
-//    return await db.ListAllSmsAsync();
-//});
+smsEndpoint.MapGet("/list-all", async (InMemorySimpleDb db) =>
+{
+    return await db.ListAllSmsAsync();
+});
 
-//smsEndpoint.MapPost("/add", async (InMemorySimpleDb db) =>
-//{
+smsEndpoint.MapPost("/add", async (InMemorySimpleDb db, SmsBase? sms) =>
+{
+    if (sms == null)
+        return new PostResponse { IsSuccess = false, Message = "Please provide data" };
 
-//});
+    var id = Guid.NewGuid().ToString();
+    return await db.AddSmsAsync(id, sms.From, sms.To, sms.Text);
+});
+
+smsEndpoint.MapPut("/edit", async (InMemorySimpleDb db, SmsBase? sms) =>
+{
+    if (sms == null)
+        return new PostResponse { IsSuccess = false, Message = "Please provide data" };
+
+    if (string.IsNullOrWhiteSpace(sms.SmsId))
+        return new PostResponse { IsSuccess = false, Message = "SmsId is required" };
+
+    return await db.EditSmsAsync(sms.SmsId, sms.From, sms.To, sms.Text);
+});
+
+smsEndpoint.MapDelete("/delete", async (InMemorySimpleDb db, string id) =>
+{
+    return await db.DeleteSmsAsync(id);
+});
 
 await app.RunAsync();
 
-public record Todo(int Id, string? Title, DateOnly? DueBy = null, bool IsComplete = false);
-
-[JsonSerializable(typeof(Todo[]))]
-//[JsonSerializable(typeof(Sms[]))]
+[JsonSerializable(typeof(List<Sms>))]
+[JsonSerializable(typeof(SmsBase))]
+[JsonSerializable(typeof(Sms))]
+[JsonSerializable(typeof(PostResponse))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 

@@ -38,8 +38,10 @@ public class InMemorySimpleDb
 
     public async Task<PostResponse> EditSmsAsync(string id, string from, string to, string text)
     {
+        PostResponse resp;
+
         if (!await IsSmsExistAsync(id))
-            await AddSmsAsync(id, from, to, text);
+            resp = await AddSmsAsync(Guid.NewGuid().ToString(), from, to, text);
         else
         {
             var oldCt = Smses[id].CreatedTimeUtc;
@@ -52,13 +54,15 @@ public class InMemorySimpleDb
                 Text = text,
                 CreatedTimeUtc = oldCt
             };
+
+            resp = new PostResponse
+            {
+                IsSuccess = true,
+                Message = $"SMS '{id}' updated"
+            };
         }
 
-        return await Task.FromResult(new PostResponse
-        {
-            IsSuccess = true,
-            Message = $"SMS '{id}' updated"
-        });
+        return await Task.FromResult(resp);
     }
 
     public async Task<PostResponse> DeleteSmsAsync(string id)

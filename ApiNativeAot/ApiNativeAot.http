@@ -1,11 +1,11 @@
-@ApiNativeAot_HostAddress = http://localhost:5125
+@ApiNativeAot_HostAddress = http://localhost:5566
 
-GET {{ApiNativeAot_HostAddress}}/todos/
+GET {{ApiNativeAot_HostAddress}}/sms/list-all
 Accept: application/json
 
 ###
 
-GET {{ApiNativeAot_HostAddress}}/todos/1
+GET {{ApiNativeAot_HostAddress}}/sms/get?id=adbdaab1-52f6-437f-b573-02cc7e2ef187
 Accept: application/json
 
 ###

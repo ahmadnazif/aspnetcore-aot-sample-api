@@ -1,11 +1,43 @@
 @ApiNativeAot_HostAddress = http://localhost:5566
 
-GET {{ApiNativeAot_HostAddress}}/sms/list-all
-Accept: application/json
+GET {{ApiNativeAot_HostAddress}}/
 
 ###
 
-GET {{ApiNativeAot_HostAddress}}/sms/get?id=adbdaab1-52f6-437f-b573-02cc7e2ef187
-Accept: application/json
+GET {{ApiNativeAot_HostAddress}}/sms/
+
+###
+
+GET {{ApiNativeAot_HostAddress}}/sms/get?id=e4eb87c2-a185-4d38-982e-2e1bccf8794a
+
+###
+
+GET {{ApiNativeAot_HostAddress}}/sms/list-all
+
+###
+
+POST {{ApiNativeAot_HostAddress}}/sms/add
+Content-Type: application/json
+
+{
+	"from": "from",
+	"to": "to",
+	"text": "HelloX"
+}
+
+###
+
+PUT {{ApiNativeAot_HostAddress}}/sms/edit
+Content-Type: application/json
+
+{
+	"smsId": "A123",
+	"from": "from",
+	"to": "to",
+	"text": "HelloX"
+}
+###
+
+DELETE {{ApiNativeAot_HostAddress}}/sms/delete?id=e4eb87c2-a185-4d38-982e-2e1bccf8794a
 
 ###

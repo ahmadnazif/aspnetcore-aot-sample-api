@@ -72,7 +72,4 @@ await app.RunAsync();
 [JsonSerializable(typeof(SmsBase))]
 [JsonSerializable(typeof(Sms))]
 [JsonSerializable(typeof(PostResponse))]
-internal partial class AppJsonSerializerContext : JsonSerializerContext
-{
-
-}
+internal partial class AppJsonSerializerContext : JsonSerializerContext { }

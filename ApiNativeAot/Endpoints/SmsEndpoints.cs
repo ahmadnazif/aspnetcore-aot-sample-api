@@ -8,32 +8,32 @@ public static class SmsEndpoints
 {
     public static void MapSmsEndpoints(this IEndpointRouteBuilder builder, InMemorySimpleDb db)
     {
-        var smsEndpoint = builder.MapGroup("/sms");
+        var endpoint = builder.MapGroup("/sms");
 
-        smsEndpoint.MapGet("/", () =>
+        endpoint.MapGet("/", () =>
         {
             return "Please use: /count-all, /get, /list-all, /add, /edit, or /delete endpoint";
         });
 
-        smsEndpoint.MapGet("/count-all", async () =>
+        endpoint.MapGet("/count-all", async () =>
         {
             var count = await db.CountAllAsync();
             return Results.Ok(count);
         });
 
-        smsEndpoint.MapGet("/get", async (string id) =>
+        endpoint.MapGet("/get", async (string id) =>
         {
             var sms = await db.GetSmsAsync(id);
             return sms == null ? Results.NoContent() : Results.Ok(sms);
         });
 
-        smsEndpoint.MapGet("/list-all", async () =>
+        endpoint.MapGet("/list-all", async () =>
         {
             var list = await db.ListAllSmsAsync();
             return Results.Ok(list);
         });
 
-        smsEndpoint.MapPost("/add", async (SmsBase? sms) =>
+        endpoint.MapPost("/add", async (SmsBase? sms) =>
         {
             try
             {
@@ -47,10 +47,9 @@ public static class SmsEndpoints
             {
                 return new PostResponse { IsSuccess = false, Message = $"Exception: {ex.Message}" };
             }
-
         });
 
-        smsEndpoint.MapPut("/edit", async (SmsBase? sms) =>
+        endpoint.MapPut("/edit", async (SmsBase? sms) =>
         {
             try
             {
@@ -68,7 +67,7 @@ public static class SmsEndpoints
             }
         });
 
-        smsEndpoint.MapDelete("/delete", async (string id) =>
+        endpoint.MapDelete("/delete", async (string id) =>
         {
             return await db.DeleteSmsAsync(id);
         });

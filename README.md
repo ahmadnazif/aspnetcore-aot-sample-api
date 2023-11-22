@@ -1,5 +1,5 @@
 # ApiNativeAot
-This is a simple API that built using .NET 8 with native AOT support. The similiar API built using NodeJS can be found [here](https://github.com/ahmadnazif/nodejs-sample-api).
+This is a simple API server that built using .NET 8 with native AOT support. The similiar API server built using NodeJS & ExpressJS can be found [here](https://github.com/ahmadnazif/nodejs-sample-api).
 
 ## Key point
 - API server with Ahead-of-time (AOT) compilation native support which improves app startup time

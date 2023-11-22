@@ -1,3 +1,4 @@
+using ApiNativeAot.Endpoints;
 using ApiNativeAot.Models;
 using ApiNativeAot.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -25,46 +26,8 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Please use /sms endpoints");
 
-var smsEndpoint = app.MapGroup("/sms");
-smsEndpoint.MapGet("/", () =>
-{
-    return "Please use: /get, /list-all, /add, /edit, or /delete endpoint";
-});
-
-smsEndpoint.MapGet("/get", async (InMemorySimpleDb db, string id) =>
-{
-    return await db.GetSmsAsync(id);
-});
-
-smsEndpoint.MapGet("/list-all", async (InMemorySimpleDb db) =>
-{
-    return await db.ListAllSmsAsync();
-});
-
-smsEndpoint.MapPost("/add", async (InMemorySimpleDb db, SmsBase? sms) =>
-{
-    if (sms == null)
-        return new PostResponse { IsSuccess = false, Message = "Please provide data" };
-
-    var id = Guid.NewGuid().ToString();
-    return await db.AddSmsAsync(id, sms.From, sms.To, sms.Text);
-});
-
-smsEndpoint.MapPut("/edit", async (InMemorySimpleDb db, SmsBase? sms) =>
-{
-    if (sms == null)
-        return new PostResponse { IsSuccess = false, Message = "Please provide data" };
-
-    if (string.IsNullOrWhiteSpace(sms.SmsId))
-        return new PostResponse { IsSuccess = false, Message = "SmsId is required" };
-
-    return await db.EditSmsAsync(sms.SmsId, sms.From, sms.To, sms.Text);
-});
-
-smsEndpoint.MapDelete("/delete", async (InMemorySimpleDb db, string id) =>
-{
-    return await db.DeleteSmsAsync(id);
-});
+var db = app.Services.GetRequiredService<InMemorySimpleDb>();
+app.MapSmsEndpoints(db);
 
 await app.RunAsync();
 

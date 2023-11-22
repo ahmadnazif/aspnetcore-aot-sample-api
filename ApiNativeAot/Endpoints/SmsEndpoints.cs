@@ -5,7 +5,7 @@ namespace ApiNativeAot.Endpoints;
 
 public static class SmsEndpoints
 {
-    public static void AddSmsEndpoints(this IEndpointRouteBuilder builder, InMemorySimpleDb db)
+    public static void MapSmsEndpoints(this IEndpointRouteBuilder builder, InMemorySimpleDb db)
     {
         var smsEndpoint = builder.MapGroup("/sms");
 

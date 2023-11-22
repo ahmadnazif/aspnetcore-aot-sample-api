@@ -8,6 +8,11 @@ GET {{ApiNativeAot_HostAddress}}/sms/
 
 ###
 
+
+GET {{ApiNativeAot_HostAddress}}/sms/count-all
+
+###
+
 GET {{ApiNativeAot_HostAddress}}/sms/get?id=e4eb87c2-a185-4d38-982e-2e1bccf8794a
 
 ###
@@ -41,3 +46,4 @@ Content-Type: application/json
 DELETE {{ApiNativeAot_HostAddress}}/sms/delete?id=e4eb87c2-a185-4d38-982e-2e1bccf8794a
 
 ###
+

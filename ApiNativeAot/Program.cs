@@ -1,6 +1,7 @@
 using ApiNativeAot.Endpoints;
 using ApiNativeAot.Models;
 using ApiNativeAot.Services;
+using ApiNativeAot.Workers;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
 });
 
+builder.Services.AddHostedService<DbDataInitializer>();
 builder.Services.AddSingleton<InMemorySimpleDb>();
 
 builder.WebHost.ConfigureKestrel(x =>

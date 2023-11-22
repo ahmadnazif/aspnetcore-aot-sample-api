@@ -6,6 +6,11 @@ public class InMemorySimpleDb
 {
     private Dictionary<string, Sms> Smses { get; set; } = [];
 
+    public async Task<int> CountAllAsync()
+    {
+        return await Task.FromResult(Smses.Count);
+    }
+
     public async Task<Sms> GetSmsAsync(string id)
     {
         var sms = !await IsSmsExistAsync(id) ? null : Smses[id];

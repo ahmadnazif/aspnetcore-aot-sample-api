@@ -12,7 +12,13 @@ public static class SmsEndpoints
 
         smsEndpoint.MapGet("/", () =>
         {
-            return "Please use: /get, /list-all, /add, /edit, or /delete endpoint";
+            return "Please use: /count-all, /get, /list-all, /add, /edit, or /delete endpoint";
+        });
+
+        smsEndpoint.MapGet("/count-all", async () =>
+        {
+            var count = await db.CountAllAsync();
+            return Results.Ok(count);
         });
 
         smsEndpoint.MapGet("/get", async (string id) =>

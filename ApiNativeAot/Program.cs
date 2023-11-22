@@ -1,9 +1,6 @@
 using ApiNativeAot.Endpoints;
 using ApiNativeAot.Models;
 using ApiNativeAot.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.Xml;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -35,4 +32,5 @@ await app.RunAsync();
 [JsonSerializable(typeof(SmsBase))]
 [JsonSerializable(typeof(Sms))]
 [JsonSerializable(typeof(PostResponse))]
+[JsonSerializable(typeof(int))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext { }
